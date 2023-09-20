@@ -17,7 +17,7 @@
 - Code Refactoring & Documentation
 - And more
 
-🌟 Open Source Contributitor
+🌟 Open Source Contributor
 
 📚 Writes Technical Articles
 
