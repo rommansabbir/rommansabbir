@@ -1,16 +1,28 @@
-### Hi there 👋
+## 👋 Hello, I'm Romman Sabbir
 
-<!--
-**rommansabbir/rommansabbir** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+🚀 Seasoned Android Engineer with over 5 years of experience
+📱 Specializing in Kotlin/Java, Android Framework, and more
+💡 Passionate about clean, maintainable, and reusable code
+🌐 Open source contributor and Android Development writer
+👨‍💼 Team lead of the Android Department, ensuring top-notch quality
 
-Here are some ideas to get you started:
+🔧 Expertise:
+- Kotlin/Java
+- Android Framework
+- Design Patterns
+- Dependency Injection
+- MVVM, SOLID
+- Threading (RxJava2, Coroutine)
+- Git Flow
+- Code Refactoring & Documentation
+- And more
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+🌟 Open Source Contributitor
+
+📚 Writes Technical Articles
+
+🤝 Let's connect and explore possibilities!
+
+📧 Contact: rommansabbir@gmail.com
+
+🌐 Portfolio: https://rommansabbir.com/
