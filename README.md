@@ -1,14 +1,6 @@
 ## 👋 Hello, I'm Romman Sabbir
 
-🚀 Seasoned Android Engineer with over 5 years of experience
-
-📱 Specializing in Kotlin/Java, Android Framework, and more
-
-💡 Passionate about clean, maintainable, and reusable code
-
-🌐 Open source contributor and Android Development writer
-
-👨‍💼 Team lead of the Android Department, ensuring top-notch quality
+🚀 Seasoned Android Engineer with over 5 years of experience. 📱 Specializing in Kotlin/Java, Android Framework, and more. 💡 Passionate about clean, maintainable, and reusable code. 🌐 Open source contributor and Android Development writer. 👨‍💼 Team lead of the Android Department, ensuring top-notch quality
 
 🔧 Expertise:
 - Kotlin/Java
@@ -21,12 +13,7 @@
 - Code Refactoring & Documentation
 - And more
 
-🌟 Open Source Contributor
-
-📚 Writes Technical Articles
+🌟 Open Source Contributor | 📚 Writes Technical Articles
 
 🤝 Let's connect and explore possibilities!
-
-📧 Contact: rommansabbir@gmail.com
-
-🌐 Portfolio: https://rommansabbir.com/
+📧 Contact: rommansabbir@gmail.com | 🌐 Portfolio: https://rommansabbir.com/
