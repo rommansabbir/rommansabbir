@@ -12,4 +12,4 @@
 
 Let's connect and explore opportunities to collaborate!
 
-📧 Email: rommansabbir@gmail.com | 🌐 Portfolio: rommansabbir.com
+📧 Email: rommansabbir@gmail.com | 🌐 Blog: rommansabbir.com
