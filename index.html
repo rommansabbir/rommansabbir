@@ -1,0 +1,606 @@
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g:#006A4E;--gl:#00a878;--g2:#004d38;
+  --r:#F42A41;--rl:#ff6b7a;--r2:#c01a2e;
+  --grad:linear-gradient(135deg,var(--gl),var(--g) 40%,var(--r) 70%,var(--rl));
+  --grad90:linear-gradient(90deg,var(--gl),var(--r));
+  --grad-text:linear-gradient(135deg,var(--gl) 0%,var(--g) 35%,var(--r) 65%,var(--rl) 100%);
+}
+[data-theme="dark"]{
+  --bg:#060a07;--bg2:#0a0f0b;--bg3:#0f1610;
+  --txt:#eef3ef;--txt2:#8aaa92;--txt3:#506055;
+  --bord:rgba(0,106,78,0.2);--bord2:rgba(0,106,78,0.1);
+  --card:#0d1510;--nav-bg:rgba(6,10,7,0.92);
+  --skill-empty:rgba(255,255,255,0.06);
+  --hover:rgba(0,106,78,0.07);
+  --tag-bg:rgba(0,106,78,0.12);--tag-col:#8aaa92;
+  --disc:rgba(244,42,65,0.07);
+  --stat-bg:#060a07;
+}
+[data-theme="light"]{
+  --bg:#f4f7f5;--bg2:#eaf0ec;--bg3:#e0eae3;
+  --txt:#0d1f12;--txt2:#3d6048;--txt3:#7a9a82;
+  --bord:rgba(0,106,78,0.18);--bord2:rgba(0,106,78,0.08);
+  --card:#ffffff;--nav-bg:rgba(244,247,245,0.94);
+  --skill-empty:rgba(0,106,78,0.1);
+  --hover:rgba(0,106,78,0.05);
+  --tag-bg:rgba(0,106,78,0.08);--tag-col:#2a5c3a;
+  --disc:rgba(244,42,65,0.05);
+  --stat-bg:#eaf0ec;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'JetBrains Mono',monospace;overflow-x:hidden;cursor:none;transition:background 0.3s,color 0.3s}
+
+/* CURSOR */
+#cur{width:7px;height:7px;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;background:var(--r);mix-blend-mode:difference}
+#cur-r{width:28px;height:28px;border:1px solid rgba(244,42,65,0.4);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:all 0.13s ease}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 3.5rem;
+  background:var(--nav-bg);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--bord);
+  transition:background 0.3s;
+}
+.nav-logo{
+  font-size:12px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;
+  background:var(--grad90);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
+.nav-links a{font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--txt2);text-decoration:none;transition:color 0.2s;cursor:none;display:flex;align-items:center;gap:5px}
+.nav-links a:hover{color:var(--txt)}
+.nav-right{display:flex;align-items:center;gap:1rem}
+
+/* THEME TOGGLE */
+.theme-toggle{
+  background:none;border:1px solid var(--bord);padding:0.45rem 0.75rem;cursor:none;
+  color:var(--txt2);font-family:'JetBrains Mono',monospace;font-size:11px;
+  display:flex;align-items:center;gap:6px;transition:border-color 0.2s,color 0.2s;
+}
+.theme-toggle:hover{border-color:var(--g);color:var(--gl)}
+.nav-cta{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  padding:0.5rem 1.2rem;border:none;cursor:none;text-decoration:none;
+  background:var(--grad);color:#fff;transition:opacity 0.2s;display:flex;align-items:center;gap:6px;
+}
+.nav-cta:hover{opacity:0.85}
+
+/* ICON helper */
+.ico{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* HERO */
+#hero{
+  min-height:100vh;display:grid;grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--bord);position:relative;overflow:hidden;
+}
+.hero-glow-g{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--disc) 0%,transparent 70%);top:-200px;left:-150px;pointer-events:none}
+.hero-glow-r{position:absolute;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(244,42,65,0.07) 0%,transparent 70%);bottom:-80px;right:0;pointer-events:none}
+.flag-disc{position:absolute;right:8%;top:50%;transform:translateY(-50%);width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(244,42,65,0.08) 0%,transparent 65%);pointer-events:none}
+.hero-left{padding:7rem 3.5rem 4rem;display:flex;flex-direction:column;justify-content:flex-end;border-right:1px solid var(--bord);position:relative;z-index:1}
+.hero-right{padding:7rem 3.5rem 4rem;display:flex;flex-direction:column;justify-content:space-between;position:relative;z-index:1}
+
+.hero-tag{font-size:10px;letter-spacing:0.4em;text-transform:uppercase;
+  background:var(--grad90);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:2rem;display:flex;align-items:center;gap:0.8rem}
+.hero-tag::before{content:'';display:block;width:28px;height:1px;background:var(--grad90)}
+
+.hero-name{font-size:clamp(3rem,7vw,7rem);font-weight:800;line-height:0.88;letter-spacing:-0.04em}
+.hero-name .solid{color:var(--txt);display:block}
+.hero-name .grad{display:block;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.hero-sub{font-size:0.82rem;line-height:1.85;color:var(--txt2);margin:1.8rem 0 2.5rem}
+.hero-sub strong{color:var(--txt)}
+
+.hero-actions{display:flex;gap:0.8rem;flex-wrap:wrap}
+.btn-grad{background:var(--grad);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:0.85rem 1.6rem;border:none;text-decoration:none;cursor:none;transition:opacity 0.2s;display:inline-flex;align-items:center;gap:7px}
+.btn-grad:hover{opacity:0.85}
+.btn-outline{color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;padding:0.85rem 1.6rem;border:1px solid var(--bord);text-decoration:none;cursor:none;transition:border-color 0.2s,color 0.2s;display:inline-flex;align-items:center;gap:7px}
+.btn-outline:hover{border-color:var(--gl);color:var(--gl)}
+
+.role-list{display:flex;flex-direction:column;gap:0}
+.role-item{display:flex;align-items:center;gap:1rem;padding:0.8rem 0;border-bottom:1px solid var(--bord2)}
+.role-num{font-size:9px;color:var(--txt3);letter-spacing:0.2em;min-width:18px}
+.role-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.role-name{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--txt2)}
+
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bord);margin-top:1.8rem}
+.stat-box{background:var(--stat-bg);padding:1.3rem 1rem;transition:background 0.3s}
+.stat-num{font-size:1.9rem;font-weight:800;line-height:1;letter-spacing:-0.03em;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--txt3);margin-top:0.3rem;display:flex;align-items:center;gap:5px}
+
+/* MARQUEE */
+.marquee-wrap{overflow:hidden;border-top:1px solid var(--bord);border-bottom:1px solid var(--bord);padding:0.7rem 0;background:var(--bg2);transition:background 0.3s}
+.marquee-track{display:flex;animation:marquee 26s linear infinite;width:max-content}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.m-item{font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--txt3);padding:0 2rem;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.m-dot{width:4px;height:4px;border-radius:50%;background:var(--grad);flex-shrink:0}
+
+/* SECTIONS */
+.sec-hd{padding:4.5rem 3.5rem 3rem;border-bottom:1px solid var(--bord)}
+.sec-lbl{font-size:9px;letter-spacing:0.45em;text-transform:uppercase;background:var(--grad90);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.7rem;display:flex;align-items:center;gap:7px}
+.sec-title{font-size:clamp(2.2rem,4vw,3.8rem);font-weight:800;letter-spacing:-0.04em;line-height:0.9;color:var(--txt)}
+.sec-title .g{background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ABOUT */
+#about{background:var(--bg2);border-bottom:1px solid var(--bord);transition:background 0.3s}
+.about-grid{display:grid;grid-template-columns:1fr 1fr}
+.about-col{padding:3.5rem;border-right:1px solid var(--bord)}
+.about-col:last-child{border-right:none}
+.about-p{font-size:0.82rem;line-height:1.9;color:var(--txt2);margin-bottom:0.9rem}
+.about-p strong{color:var(--txt);font-weight:600}
+.id-card{padding:1.6rem;margin-top:0.9rem;border:1px solid var(--bord);background:var(--card);position:relative;transition:background 0.3s,border-color 0.2s}
+.id-card:hover{border-color:var(--g)}
+.id-card.eng::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(180deg,var(--gl),var(--g2))}
+.id-card.mus::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(180deg,var(--r),var(--r2))}
+.id-lbl{font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--txt3);margin-bottom:0.5rem;display:flex;align-items:center;gap:6px}
+.id-title{font-size:0.9rem;font-weight:700;color:var(--txt);margin-bottom:0.4rem}
+.id-desc{font-size:10px;color:var(--txt2);line-height:1.7}
+
+/* SKILLS */
+#skills{border-bottom:1px solid var(--bord)}
+.sk-table{width:100%}
+.sk-tr{border-bottom:1px solid var(--bord2);transition:background 0.15s;cursor:default}
+.sk-tr:hover{background:var(--hover)}
+.sk-td{padding:1.1rem 3.5rem;vertical-align:middle}
+.sk-cat{font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--txt3);width:130px;display:flex;align-items:center;gap:6px}
+.sk-nm{font-size:0.85rem;font-weight:600;color:var(--txt)}
+.sk-bar-w{width:200px}
+.sk-bar{height:2px;background:var(--skill-empty);position:relative}
+.sk-fill{height:2px;transition:width 1.4s cubic-bezier(0.16,1,0.3,1)}
+.sk-fill.tech{background:linear-gradient(90deg,var(--g),var(--gl))}
+.sk-fill.mus{background:linear-gradient(90deg,var(--r2),var(--rl))}
+
+/* EXPERIENCE */
+#experience{background:var(--bg2);border-bottom:1px solid var(--bord);transition:background 0.3s}
+.exp-layout{display:grid;grid-template-columns:250px 1fr}
+.exp-nav{border-right:1px solid var(--bord);padding:2.5rem 0}
+.exp-nav-item{padding:1rem 1.8rem;cursor:none;border-left:2px solid transparent;transition:all 0.2s;display:flex;flex-direction:column;gap:3px}
+.exp-nav-item:hover{background:var(--hover)}
+.exp-nav-item.active{border-left-color:var(--g);background:var(--hover)}
+.exp-nav-title{font-size:0.82rem;font-weight:600;color:var(--txt2);transition:color 0.2s;display:flex;align-items:center;gap:7px}
+.exp-nav-item.active .exp-nav-title,.exp-nav-item:hover .exp-nav-title{color:var(--txt)}
+.exp-nav-period{font-size:9px;letter-spacing:0.12em;color:var(--txt3);padding-left:23px}
+.exp-content{padding:3rem 3.5rem}
+.exp-co{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:0.4rem;background:linear-gradient(135deg,var(--txt) 40%,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.exp-role{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gl);margin-bottom:1.4rem;display:flex;align-items:center;gap:7px}
+.exp-desc{font-size:0.82rem;line-height:1.85;color:var(--txt2);margin-bottom:1.8rem}
+.exp-tags{display:flex;flex-wrap:wrap;gap:0.45rem}
+.tag{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:0.28rem 0.7rem;border:1px solid var(--bord);color:var(--tag-col);background:var(--tag-bg)}
+.exp-detail{display:none}.exp-detail.show{display:block}
+
+/* MUSIC */
+#music{border-bottom:1px solid var(--bord)}
+.music-layout{display:grid;grid-template-columns:1fr 1fr}
+.music-left{padding:3.5rem;border-right:1px solid var(--bord)}
+.music-right{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bord);align-content:start}
+.album-tile{background:var(--bg);padding:1.8rem;aspect-ratio:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;transition:background 0.2s;cursor:default}
+.album-tile:hover{background:var(--bg3)}
+.album-big-num{position:absolute;top:0.8rem;right:1rem;font-size:4.5rem;font-weight:800;line-height:1;letter-spacing:-0.04em;color:var(--bord);transition:color 0.3s}
+.album-name{font-size:0.8rem;font-weight:700;color:var(--txt);position:relative;z-index:1;line-height:1.3}
+.album-lbl{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;background:var(--grad90);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:0.3rem;position:relative;z-index:1}
+.eq-row{display:flex;align-items:flex-end;gap:4px;height:40px;margin:1.4rem 0}
+.eq-b{width:5px;border-radius:2px 2px 0 0;animation:eq 1.2s ease-in-out infinite}
+.eq-b:nth-child(odd){background:var(--g)}.eq-b:nth-child(even){background:var(--r)}
+.eq-b:nth-child(1){animation-delay:0s}.eq-b:nth-child(2){animation-delay:0.12s}.eq-b:nth-child(3){animation-delay:0.24s}.eq-b:nth-child(4){animation-delay:0.08s}.eq-b:nth-child(5){animation-delay:0.32s}.eq-b:nth-child(6){animation-delay:0.16s}.eq-b:nth-child(7){animation-delay:0.04s}.eq-b:nth-child(8){animation-delay:0.28s}.eq-b:nth-child(9){animation-delay:0.2s}.eq-b:nth-child(10){animation-delay:0.36s}
+@keyframes eq{0%,100%{height:15%}50%{height:100%}}
+.plat-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;padding:0.5rem 0.9rem;border:1px solid var(--bord);color:var(--txt2);text-decoration:none;cursor:none;transition:border-color 0.2s,color 0.2s;display:inline-flex;align-items:center;gap:6px}
+.plat-btn:hover{border-color:var(--gl);color:var(--gl)}
+.plat-row{display:flex;gap:0.7rem;margin-top:1.8rem;flex-wrap:wrap}
+
+/* PROJECTS */
+#projects{background:var(--bg2);border-bottom:1px solid var(--bord);transition:background 0.3s}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bord)}
+.proj-card{background:var(--bg2);padding:2.2rem;position:relative;overflow:hidden;transition:background 0.2s}
+.proj-card:hover{background:var(--bg3)}
+.proj-n{font-size:9px;letter-spacing:0.3em;color:var(--txt3);margin-bottom:1.2rem;display:flex;align-items:center;gap:6px}
+.proj-name{font-size:0.95rem;font-weight:800;color:var(--txt);margin-bottom:0.7rem;letter-spacing:-0.02em;line-height:1.1}
+.proj-desc{font-size:0.78rem;color:var(--txt2);line-height:1.7;margin-bottom:1.3rem}
+.proj-link{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;background:var(--grad90);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;display:inline-flex;align-items:center;gap:5px;cursor:none;transition:gap 0.2s}
+.proj-link:hover{gap:8px}
+.proj-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--grad);transform:scaleX(0);transition:transform 0.35s;transform-origin:left}
+.proj-card:hover::after{transform:scaleX(1)}
+.proj-featured{background:var(--card);border:1px solid var(--bord)}
+
+/* CONTACT */
+#contact{border-top:1px solid var(--bord)}
+.contact-inner{padding:5.5rem 3.5rem;text-align:center}
+.contact-eyebrow{font-size:9px;letter-spacing:0.45em;text-transform:uppercase;color:var(--txt3);margin-bottom:1.8rem;display:flex;align-items:center;justify-content:center;gap:8px}
+.contact-big{font-size:clamp(3.5rem,8vw,8rem);font-weight:800;letter-spacing:-0.04em;line-height:0.85;margin-bottom:2.5rem;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.c-links{display:flex;justify-content:center;gap:2rem;margin:2rem 0;flex-wrap:wrap}
+.c-link{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--txt2);text-decoration:none;transition:color 0.2s;cursor:none;display:flex;align-items:center;gap:7px}
+.c-link:hover{color:var(--txt)}
+.c-link-arrow{background:var(--grad90);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.c-actions{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+
+footer{padding:1.3rem 3.5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bord)}
+.footer-text{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--txt3);display:flex;align-items:center;gap:6px}
+.footer-flag{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;background:var(--grad90);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:flex;align-items:center;gap:6px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fadeUp 0.8s ease forwards;opacity:0}
+.fi-1{animation-delay:0.05s}.fi-2{animation-delay:0.2s}.fi-3{animation-delay:0.35s}.fi-4{animation-delay:0.5s}.fi-5{animation-delay:0.65s}
+</style>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<nav>
+  <div class="nav-logo">RS_Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#about">
+      <svg class="ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>About</a></li>
+    <li><a href="#skills">
+      <svg class="ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Skills</a></li>
+    <li><a href="#experience">
+      <svg class="ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Work</a></li>
+    <li><a href="#music">
+      <svg class="ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Music</a></li>
+    <li><a href="#contact">
+      <svg class="ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+      <svg id="theme-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <span id="theme-lbl">Light</span>
+    </button>
+    <a href="https://ylnk.cc/mycv" target="_blank" class="nav-cta">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download CV
+    </a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-glow-g"></div><div class="hero-glow-r"></div><div class="flag-disc"></div>
+  <div class="hero-left">
+    <div class="hero-tag fi fi-1">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Senior Android Engineer · Music Producer · Bangladesh
+    </div>
+    <h1 class="hero-name fi fi-2">
+      <span class="solid">ROMMAN</span>
+      <span class="grad">SABBIR</span>
+    </h1>
+    <p class="hero-sub fi fi-3">
+      Building <strong>Android systems for 20M+ users</strong> and crafting<br>
+      <strong>synthwave & EDM</strong> under Souloryx Records.<br>
+      Two disciplines. One obsession with precision.
+    </p>
+    <div class="hero-actions fi fi-4">
+      <a href="#experience" class="btn-grad">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        View Work
+      </a>
+      <a href="#contact" class="btn-outline">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Get in Touch
+      </a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="role-list fi fi-2">
+      <div class="role-item">
+        <span class="role-num">01</span>
+        <svg class="role-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--gl)"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span class="role-name">Lead Mobile Engineer</span>
+      </div>
+      <div class="role-item">
+        <span class="role-num">02</span>
+        <svg class="role-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--gl)"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span class="role-name">Kotlin + Clean Architecture</span>
+      </div>
+      <div class="role-item">
+        <span class="role-num">03</span>
+        <svg class="role-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--gl)"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+        <span class="role-name">Spring Boot Backend</span>
+      </div>
+      <div class="role-item">
+        <span class="role-num">04</span>
+        <svg class="role-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--r)"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span class="role-name">Electronic Music Producer</span>
+      </div>
+      <div class="role-item">
+        <span class="role-num">05</span>
+        <svg class="role-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--gl)"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        <span class="role-name">Open Source Contributor</span>
+      </div>
+    </div>
+    <div class="hero-stats fi fi-5">
+      <div class="stat-box">
+        <div class="stat-num">20M+</div>
+        <div class="stat-label">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          App Users
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">8+</div>
+        <div class="stat-label">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Years Eng.
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">4M+</div>
+        <div class="stat-label">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+          Active Groups
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">2</div>
+        <div class="stat-label">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          Albums
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="m-item"><div class="m-dot"></div>Kotlin</span>
+    <span class="m-item"><div class="m-dot"></div>Clean Architecture</span>
+    <span class="m-item"><div class="m-dot"></div>Android Lead</span>
+    <span class="m-item"><div class="m-dot"></div>Spring Boot</span>
+    <span class="m-item"><div class="m-dot"></div>Synthwave</span>
+    <span class="m-item"><div class="m-dot"></div>Made in Bangladesh</span>
+    <span class="m-item"><div class="m-dot"></div>TDD</span>
+    <span class="m-item"><div class="m-dot"></div>Souloryx Records</span>
+    <span class="m-item"><div class="m-dot"></div>MVVM</span>
+    <span class="m-item"><div class="m-dot"></div>Open Source</span>
+    <span class="m-item"><div class="m-dot"></div>Kotlin</span>
+    <span class="m-item"><div class="m-dot"></div>Clean Architecture</span>
+    <span class="m-item"><div class="m-dot"></div>Android Lead</span>
+    <span class="m-item"><div class="m-dot"></div>Spring Boot</span>
+    <span class="m-item"><div class="m-dot"></div>Synthwave</span>
+    <span class="m-item"><div class="m-dot"></div>Made in Bangladesh</span>
+    <span class="m-item"><div class="m-dot"></div>TDD</span>
+    <span class="m-item"><div class="m-dot"></div>Souloryx Records</span>
+    <span class="m-item"><div class="m-dot"></div>MVVM</span>
+    <span class="m-item"><div class="m-dot"></div>Open Source</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="sec-hd">
+    <div class="sec-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>About</div>
+    <h2 class="sec-title">Two crafts,<br><span class="g">one mind.</span></h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-col">
+      <p class="about-p">I'm a <strong>Senior Android Engineer</strong> with 8+ years building enterprise-grade mobile applications. Kotlin-first across Android and backend, with deep expertise in <strong>Clean Architecture, MVVM, and TDD</strong>.</p>
+      <p class="about-p">Currently <strong>Assistant Engineering Manager at Ami Probashi</strong> — leading Android & iOS teams across architecture, delivery, and engineering culture in Dhaka, Bangladesh.</p>
+      <p class="about-p">Founder of <strong>yLnk</strong> — a high-performance URL shortening and analytics platform built for scale.</p>
+    </div>
+    <div class="about-col" style="border-right:none">
+      <div class="id-card eng">
+        <div class="id-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Engineer Identity</div>
+        <div class="id-title">Architect of Scalable Systems</div>
+        <div class="id-desc">Clean Arch · MVVM · Spring Boot · TDD · Samsung Knox · CI/CD · Team Lead</div>
+      </div>
+      <div class="id-card mus">
+        <div class="id-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Music Identity</div>
+        <div class="id-title">Electronic Music Producer</div>
+        <div class="id-desc">Souloryx Records · Synthwave · EDM · House · "Welcome To Paradise" · "Blissful Ignorance"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="sec-hd">
+    <div class="sec-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Arsenal</div>
+    <h2 class="sec-title">Built with<br><span class="g">precision.</span></h2>
+  </div>
+  <table class="sk-table">
+    <tr class="sk-tr"><td class="sk-td sk-cat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Core</td><td class="sk-td sk-nm">Kotlin</td><td class="sk-td sk-bar-w"><div class="sk-bar"><div class="sk-fill tech" style="width:98%"></div></div></td></tr>
+    <tr class="sk-tr"><td class="sk-td sk-cat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Arch</td><td class="sk-td sk-nm">Clean Architecture + MVVM</td><td class="sk-td sk-bar-w"><div class="sk-bar"><div class="sk-fill tech" style="width:95%"></div></div></td></tr>
+    <tr class="sk-tr"><td class="sk-td sk-cat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Android</td><td class="sk-td sk-nm">Jetpack Compose</td><td class="sk-td sk-bar-w"><div class="sk-bar"><div class="sk-fill tech" style="width:92%"></div></div></td></tr>
+    <tr class="sk-tr"><td class="sk-td sk-cat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>Backend</td><td class="sk-td sk-nm">Spring Boot</td><td class="sk-td sk-bar-w"><div class="sk-bar"><div class="sk-fill tech" style="width:80%"></div></div></td></tr>
+    <tr class="sk-tr"><td class="sk-td sk-cat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Testing</td><td class="sk-td sk-nm">TDD / Unit & Instrumentation</td><td class="sk-td sk-bar-w"><div class="sk-bar"><div class="sk-fill tech" style="width:88%"></div></div></td></tr>
+    <tr class="sk-tr"><td class="sk-td sk-cat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>iOS</td><td class="sk-td sk-nm">Swift / SwiftUI</td><td class="sk-td sk-bar-w"><div class="sk-bar"><div class="sk-fill tech" style="width:70%"></div></div></td></tr>
+    <tr class="sk-tr"><td class="sk-td sk-cat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>DevOps</td><td class="sk-td sk-nm">CI/CD + Git Workflows</td><td class="sk-td sk-bar-w"><div class="sk-bar"><div class="sk-fill tech" style="width:85%"></div></div></td></tr>
+    <tr class="sk-tr"><td class="sk-td sk-cat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--r)"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Music</td><td class="sk-td sk-nm">Synthwave / EDM Production</td><td class="sk-td sk-bar-w"><div class="sk-bar"><div class="sk-fill mus" style="width:90%"></div></div></td></tr>
+    <tr class="sk-tr"><td class="sk-td sk-cat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--r)"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>Sound</td><td class="sk-td sk-nm">Mixing & Mastering</td><td class="sk-td sk-bar-w"><div class="sk-bar"><div class="sk-fill mus" style="width:78%"></div></div></td></tr>
+  </table>
+</section>
+
+<section id="experience">
+  <div class="sec-hd">
+    <div class="sec-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Experience</div>
+    <h2 class="sec-title">Where I've<br><span class="g">shipped.</span></h2>
+  </div>
+  <div class="exp-layout">
+    <div class="exp-nav">
+      <div class="exp-nav-item active" onclick="showE(0)">
+        <div class="exp-nav-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Ami Probashi</div>
+        <div class="exp-nav-period">2021 — Present</div>
+      </div>
+      <div class="exp-nav-item" onclick="showE(1)">
+        <div class="exp-nav-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>yLnk</div>
+        <div class="exp-nav-period">2023 — Present</div>
+      </div>
+      <div class="exp-nav-item" onclick="showE(2)">
+        <div class="exp-nav-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>TBLTechNerds</div>
+        <div class="exp-nav-period">2018 — 2021</div>
+      </div>
+      <div class="exp-nav-item" onclick="showE(3)">
+        <div class="exp-nav-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Btrac Solutions</div>
+        <div class="exp-nav-period">2021</div>
+      </div>
+      <div class="exp-nav-item" onclick="showE(4)">
+        <div class="exp-nav-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Glitch Studios</div>
+        <div class="exp-nav-period">2018</div>
+      </div>
+    </div>
+    <div class="exp-content">
+      <div class="exp-detail show" id="e0">
+        <div class="exp-co">Ami Probashi</div>
+        <div class="exp-role"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Asst. Engineering Manager, Mobile — Dhaka, BD — 2021–Present</div>
+        <div class="exp-desc">Led mobile engineering across Android & iOS. Drove architecture, sprint planning, and CI/CD. Built QR/biometric attendance and certificate verification apps via Samsung Knox — 99.9% session stability, zero crashes or ANRs.</div>
+        <div class="exp-tags"><span class="tag">Kotlin</span><span class="tag">Clean Arch</span><span class="tag">TDD</span><span class="tag">Samsung Knox</span><span class="tag">CI/CD</span><span class="tag">Lead</span></div>
+      </div>
+      <div class="exp-detail" id="e1">
+        <div class="exp-co">yLnk</div>
+        <div class="exp-role"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Lead Product Engineer — 2023–Present</div>
+        <div class="exp-desc">Founded and engineered a high-performance URL shortening platform with analytics, UTM tracking, SEO, Google Analytics & Meta Pixel. Also built LinkFolio — a customizable LinkTree alternative with dynamic landing pages.</div>
+        <div class="exp-tags"><span class="tag">Kotlin</span><span class="tag">Spring Boot</span><span class="tag">SEO</span><span class="tag">Analytics</span><span class="tag">Founder</span></div>
+      </div>
+      <div class="exp-detail" id="e2">
+        <div class="exp-co">TBLTechNerds</div>
+        <div class="exp-role"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Software Engineer (Android) — Denver, CO — 2018–2021</div>
+        <div class="exp-desc">Delivered multiple Android apps across domains. Full SDLC ownership from requirement to Play Store. Worked closely with UI/UX, marketing, and backend teams over 2+ years and multiple product releases.</div>
+        <div class="exp-tags"><span class="tag">Android</span><span class="tag">Kotlin</span><span class="tag">MVVM</span><span class="tag">Play Store</span></div>
+      </div>
+      <div class="exp-detail" id="e3">
+        <div class="exp-co">Btrac Solutions</div>
+        <div class="exp-role"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Android Engineer — 2021</div>
+        <div class="exp-desc">Built clean, scalable Android apps with REST, GraphQL, and SDK integrations. Contributed to architecture decisions and cross-functional product design.</div>
+        <div class="exp-tags"><span class="tag">Android</span><span class="tag">GraphQL</span><span class="tag">REST</span></div>
+      </div>
+      <div class="exp-detail" id="e4">
+        <div class="exp-co">Glitch Studios</div>
+        <div class="exp-role"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Software Engineer (Android) — 2018</div>
+        <div class="exp-desc">Developed multiple in-house Android applications from concept to deployment — the foundation of a focused mobile engineering career.</div>
+        <div class="exp-tags"><span class="tag">Android</span><span class="tag">Java</span><span class="tag">Mobile</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="music">
+  <div class="sec-hd">
+    <div class="sec-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Music</div>
+    <h2 class="sec-title">Sound that<br><span class="g">moves.</span></h2>
+  </div>
+  <div class="music-layout">
+    <div class="music-left">
+      <p class="about-p">Electronic music producer under <strong>Souloryx Records</strong>. Two studio albums blending synthwave, EDM, and lo-fi — on Spotify, Apple Music, and SoundCloud.</p>
+      <div class="eq-row">
+        <div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div>
+        <div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div>
+      </div>
+      <p class="about-p" style="font-size:0.78rem">Notable: <strong>Sorry Dipannita (Lo-Fi Mix)</strong> · <strong>Chiro Odhora (Synthwave Edition)</strong> · <strong>Moody Neon Lights</strong></p>
+      <div class="plat-row">
+        <a href="https://open.spotify.com" target="_blank" class="plat-btn">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>Spotify
+        </a>
+        <a href="https://soundcloud.com/rommansabbir" target="_blank" class="plat-btn">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/></svg>SoundCloud
+        </a>
+        <a href="https://music.apple.com" target="_blank" class="plat-btn">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="18" cy="16" r="3"/></svg>Apple Music
+        </a>
+      </div>
+    </div>
+    <div class="music-right">
+      <div class="album-tile"><div class="album-big-num">01</div><div class="album-name">Welcome To Paradise</div><div class="album-lbl">Souloryx Records · 2023</div></div>
+      <div class="album-tile"><div class="album-big-num">02</div><div class="album-name">Blissful Ignorance</div><div class="album-lbl">Souloryx Records · 2022</div></div>
+      <div class="album-tile" style="grid-column:1/-1;aspect-ratio:unset;padding:1.5rem 1.8rem">
+        <div class="album-lbl" style="margin-bottom:0.4rem">Label</div>
+        <div class="album-name" style="font-size:0.85rem">Souloryx Records — Independent Electronic</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="sec-hd">
+    <div class="sec-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Projects</div>
+    <h2 class="sec-title">Things I've<br><span class="g">built.</span></h2>
+  </div>
+  <div class="proj-grid">
+    <div class="proj-card"><div class="proj-n"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>01</div><div class="proj-name">yLnk Platform</div><div class="proj-desc">URL shortener with UTM tracking, SEO, Google Analytics & Meta Pixel. LinkFolio for creator landing pages.</div><a href="https://rommansabbir.com" target="_blank" class="proj-link">Explore <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+    <div class="proj-card"><div class="proj-n"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>02</div><div class="proj-name">Android Libraries</div><div class="proj-desc">Open-source Android utilities — network helpers, architecture tools, Kotlin extensions on GitHub.</div><a href="https://github.com/rommansabbir" target="_blank" class="proj-link">GitHub <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+    <div class="proj-card"><div class="proj-n"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>03</div><div class="proj-name">Knox MDM Apps</div><div class="proj-desc">Enterprise Samsung Knox apps for biometric attendance and certificate verification. 99.9% stability.</div><a href="https://www.linkedin.com/in/rommansabbir" target="_blank" class="proj-link">Details <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+    <div class="proj-card"><div class="proj-n"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>04</div><div class="proj-name">Engineering Blog</div><div class="proj-desc">Writing on Android architecture, Kotlin patterns, and mobile engineering best practices.</div><a href="https://rommansabbir.com" target="_blank" class="proj-link">Read <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+    <div class="proj-card"><div class="proj-n"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>05</div><div class="proj-name">Music Discography</div><div class="proj-desc">Two albums and growing. Synthwave, EDM, Lo-Fi. Available on all major streaming platforms.</div><a href="https://open.spotify.com" target="_blank" class="proj-link">Listen <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+    <div class="proj-card proj-featured"><div class="proj-n"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--gl)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span style="background:var(--grad90);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Open to Work</span></div><div class="proj-name">Available for Hire</div><div class="proj-desc">Senior / Lead Android Engineer. Mobile Engineering Lead. Open to full-time and consulting roles.</div><a href="https://ylnk.cc/mycv" target="_blank" class="proj-link">Download CV <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-eyebrow">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Available for opportunities
+    </div>
+    <div class="contact-big">Let's Build<br>Something.</div>
+    <div class="c-links">
+      <a href="mailto:rommansabbir@gmail.com" class="c-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        rommansabbir@gmail.com
+      </a>
+      <a href="https://www.linkedin.com/in/rommansabbir" target="_blank" class="c-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/rommansabbir" target="_blank" class="c-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="https://rommansabbir.com" target="_blank" class="c-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Blog
+      </a>
+    </div>
+    <div class="c-actions">
+      <a href="mailto:rommansabbir@gmail.com" class="btn-grad">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Send Email
+      </a>
+      <a href="https://ylnk.cc/mycv" target="_blank" class="btn-outline">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download CV
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-text">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    © 2025 Romman Sabbir
+  </div>
+  <div class="footer-flag">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    Made with pride in Bangladesh
+  </div>
+</footer>
+
+<script>
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx-3+'px';cur.style.top=my-3+'px'});
+(function tick(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx-14+'px';ring.style.top=ry-14+'px';requestAnimationFrame(tick)})();
+
+const root=document.documentElement;
+let dark=true;
+root.setAttribute('data-theme','dark');
+
+function toggleTheme(){
+  dark=!dark;
+  root.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('theme-lbl').textContent=dark?'Light':'Dark';
+  const ico=document.getElementById('theme-icon');
+  ico.innerHTML=dark
+    ?'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+    :'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+}
+
+function showE(i){
+  document.querySelectorAll('.exp-detail').forEach((el,j)=>el.classList.toggle('show',j===i));
+  document.querySelectorAll('.exp-nav-item').forEach((el,j)=>el.classList.toggle('active',j===i));
+}
+
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.sk-fill').forEach(b=>{const w=b.style.width;b.style.width='0%';setTimeout(()=>{b.style.width=w},100)});obs.unobserve(e.target)}})},{threshold:0.2});
+const sk=document.getElementById('skills');if(sk)obs.observe(sk);
+</script>
